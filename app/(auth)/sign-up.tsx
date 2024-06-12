@@ -3,7 +3,6 @@ import {
   Text,
   ScrollView,
   Image,
-  SafeAreaView,
   StyleSheet,
   Dimensions,
   Alert,
@@ -15,6 +14,9 @@ import FormField from "@/components/FormField";
 import CustomButton from "@/components/CustomButton";
 import { Link, router } from "expo-router";
 import { createUser } from "@/lib/apperite";
+import { UseGlobalContext } from "@/context/GlobalProvider";
+import { SafeAreaView } from "react-native-safe-area-context";
+
 
 // Get the height of the viewport
 const { height: viewportHeight } = Dimensions.get("window");
@@ -27,6 +29,9 @@ const SignUp = () => {
   });
 
   const [isSubmmitting, setIsSubmmitting] = useState(false);
+
+  const { setUser,setIsLoggedIn } = UseGlobalContext();
+
 
   const Submit = async () => {
     if (!form.username || !form.email || !form.password) {
@@ -42,6 +47,9 @@ const SignUp = () => {
         form.username,
       );
      // set it to global state...
+
+     setUser(response)
+     setIsLoggedIn(true)
 
      router.replace("/home")
 

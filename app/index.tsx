@@ -1,22 +1,35 @@
-import { Text, StyleSheet, ScrollView, View, Image, Dimensions } from "react-native";
+import {
+  Text,
+  StyleSheet,
+  ScrollView,
+  View,
+  Image,
+  Dimensions,
+} from "react-native";
 import React from "react";
-import { Link,Redirect,router } from "expo-router";
+import { Link, Redirect, router } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Colors } from "@/constants/Colors";
 import { images } from "@/constants";
 import CustomButton from "@/components/CustomButton";
 import { StatusBar } from "expo-status-bar";
+import { UseGlobalContext } from "@/context/GlobalProvider";
 
 // Get the height of the viewport
-const { height: viewportHeight } = Dimensions.get('window');
-
-
-
+const { height: viewportHeight } = Dimensions.get("window");
 
 const Welcome = () => {
+  const { isLoading, isLoggedIn } = UseGlobalContext();
+
+  if (!isLoading && isLoggedIn){
+    return <Redirect href="/home" />;
+  } 
+
   return (
     <SafeAreaView style={styles.container}>
-      <ScrollView contentContainerStyle={{ flexGrow:1, justifyContent:"center" }}>
+      <ScrollView
+        contentContainerStyle={{ flexGrow: 1, justifyContent: "center" }}
+      >
         <View style={styles.mainContainer}>
           <Image source={images.logo} style={styles.logo} />
           <Image
@@ -85,11 +98,11 @@ const styles = StyleSheet.create({
   },
   mainContainer: {
     width: "100%",
-    minHeight:viewportHeight*0.8,   //80vh equivalent
+    minHeight: viewportHeight * 0.8, //80vh equivalent
     display: "flex",
     paddingLeft: 16,
     paddingRight: 16,
-    justifyContent:"center",
+    justifyContent: "center",
     alignItems: "center",
   },
   logo: {

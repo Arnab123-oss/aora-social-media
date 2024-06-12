@@ -3,16 +3,20 @@ import {
   Text,
   ScrollView,
   Image,
-  SafeAreaView,
   StyleSheet,
   Dimensions,
+  Alert,
 } from "react-native";
 import React, { useState } from "react";
 import { images } from "@/constants";
 import { Colors } from "@/constants/Colors";
 import FormField from "@/components/FormField";
 import CustomButton from "@/components/CustomButton";
-import { Link } from "expo-router";
+import { Link, router } from "expo-router";
+import { SignIn as LogInApi } from "@/lib/apperite";
+import { UseGlobalContext } from "@/context/GlobalProvider";
+import { SafeAreaView } from "react-native-safe-area-context";
+
 
 // Get the height of the viewport
 const { height: viewportHeight } = Dimensions.get("window");
@@ -25,9 +29,35 @@ const SignIn = () => {
 
   const [isSubmmitting, setIsSubmmitting] = useState(false);
 
-  const Submit = () => {
-    console.warn("Log IN");
+  const { setUser, setIsLoggedIn } = UseGlobalContext();
+
+
+  const Submit = async () => {
+    if (!form.email || !form.password) {
+      Alert.alert("Error", "Please fill in all the fields");
+    }
+
+    setIsSubmmitting(true);
+
+    try {
+      const response = await LogInApi(
+        form.email,
+        form.password
+      );
+     // set it to global state...
+     setUser(response);
+     setIsLoggedIn(true);
+      
+     Alert.alert("Success","user signed in successfully")
+     router.replace("/home")
+      
+    } catch (error: any) {
+      Alert.alert("Error", error.message);
+    } finally {
+      setIsSubmmitting(false);
+    }
   };
+
 
   return (
     <SafeAreaView style={styles.container}>
