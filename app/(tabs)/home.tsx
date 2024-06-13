@@ -14,7 +14,7 @@ import { images } from "@/constants";
 import SearchInput from "@/components/SearchInput";
 import Trending from "@/components/Trending";
 import EmptyState from "@/components/EmptyState";
-import { getAllPosts } from "@/lib/apperite";
+import { getAllPosts, getLatestPosts } from "@/lib/apperite";
 import useAppwrite from "@/lib/useAppwrite";
 import VideoCard from "@/components/VideoCard";
 
@@ -42,6 +42,8 @@ const Home = () => {
     },
   ];
   const { data: posts, refetch, loading } = useAppwrite(getAllPosts);
+  const { data: latestPosts } = useAppwrite(getLatestPosts);
+
   const [refreshing, setRefreshing] = useState(false);
 
   const onRefresh = async () => {
@@ -58,7 +60,7 @@ const Home = () => {
 
   return (
     <SafeAreaView style={styles.main}>
-      <View style={{ flex:1}}>
+      <View>
         <FlatList
           data={posts}
           renderItem={(item) => <VideoCard video={item} />}
@@ -125,7 +127,7 @@ const Home = () => {
                   Latest Videos
                 </Text>
 
-                <Trending posts={DATA ?? []} />
+                <Trending posts={latestPosts ?? []} />
               </View>
             </View>
           )}
