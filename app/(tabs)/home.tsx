@@ -4,10 +4,9 @@ import {
   FlatList,
   Image,
   RefreshControl,
-  Alert,
   StyleSheet,
 } from "react-native";
-import React, { useEffect, useState } from "react";
+import React, {useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Colors } from "@/constants/Colors";
 import { images } from "@/constants";
@@ -17,37 +16,23 @@ import EmptyState from "@/components/EmptyState";
 import { getAllPosts, getLatestPosts } from "@/lib/apperite";
 import useAppwrite from "@/lib/useAppwrite";
 import VideoCard from "@/components/VideoCard";
+import { UseGlobalContext } from "@/context/GlobalProvider";
 
-type ItemProps = { title: string };
 
-const Item = ({ title }: ItemProps) => (
-  <View>
-    <Text style={{ color: "white", fontSize: 20 }}>{title}</Text>
-  </View>
-);
 
 const Home = () => {
-  const DATA = [
-    {
-      id: "bd7acbea-c1b1-46c2-aed5-3ad53abb28ba",
-      title: "First Item",
-    },
-    {
-      id: "3ac68afc-c605-48d3-a4f8-fbd91aa97f63",
-      title: "Second Item",
-    },
-    {
-      id: "58694a0f-3da1-471f-bd96-145571e29d72",
-      title: "Third Item",
-    },
-  ];
-  const { data: posts, refetch, loading } = useAppwrite(getAllPosts);
+
+  const { user, setUser, setIsLoggedIn } = UseGlobalContext();
+// console.log(user);
+
+ 
+  const { data:posts, refetch, loading } = useAppwrite(getAllPosts);
   const { data: latestPosts } = useAppwrite(getLatestPosts);
 
   const [refreshing, setRefreshing] = useState(false);
 
   const onRefresh = async () => {
-    console.warn("fuch");
+    // console.warn("fuch");
 
     setRefreshing(true);
     await refetch();
@@ -103,7 +88,7 @@ const Home = () => {
                       fontFamily: "Poppins-SemiBold",
                     }}
                   >
-                    Arnab
+                    {user?.username}
                   </Text>
                 </View>
                 <View>
@@ -142,7 +127,6 @@ const Home = () => {
           }
         />
       </View>
-      <Text style={{ color: "white" }}>Home</Text>
     </SafeAreaView>
   );
 };

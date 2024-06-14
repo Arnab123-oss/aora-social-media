@@ -81,9 +81,9 @@ const Welcome = () => {
             handlePress={() => router.push("/sign-in")}
             containerStyles={styles.buttonStyle}
           />
-          <Link href="/home" style={{ color: "blue" }}>
+          {/* <Link href="/home" style={{ color: "blue" }}>
             Go Home
-          </Link>
+          </Link> */}
         </View>
       </ScrollView>
       <StatusBar backgroundColor="#161622" style="light" />

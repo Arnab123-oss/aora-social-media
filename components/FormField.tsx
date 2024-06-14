@@ -5,6 +5,7 @@ import {
   TextInput,
   TouchableOpacity,
   Image,
+  ViewStyle,
 } from "react-native";
 import React, { useState } from "react";
 import { Colors } from "@/constants/Colors";
@@ -15,7 +16,7 @@ interface FormFieldProps {
   value: string;
   placeholder?: string;
   handleChangeText: (text: string) => void;
-  otherStyles?: any;
+  otherStyles?: ViewStyle | ViewStyle[];
   [key: string]: any;
 }
 

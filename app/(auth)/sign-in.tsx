@@ -13,15 +13,15 @@ import { Colors } from "@/constants/Colors";
 import FormField from "@/components/FormField";
 import CustomButton from "@/components/CustomButton";
 import { Link, router } from "expo-router";
-import { SignIn as LogInApi } from "@/lib/apperite";
+import { getCurrentUser, signIn as LogInApi } from "@/lib/apperite";
 import { UseGlobalContext } from "@/context/GlobalProvider";
 import { SafeAreaView } from "react-native-safe-area-context";
-
 
 // Get the height of the viewport
 const { height: viewportHeight } = Dimensions.get("window");
 
 const SignIn = () => {
+ 
   const [form, setForm] = useState({
     email: "",
     password: "",
@@ -31,7 +31,6 @@ const SignIn = () => {
 
   const { setUser, setIsLoggedIn } = UseGlobalContext();
 
-
   const Submit = async () => {
     if (!form.email || !form.password) {
       Alert.alert("Error", "Please fill in all the fields");
@@ -40,24 +39,22 @@ const SignIn = () => {
     setIsSubmmitting(true);
 
     try {
-      const response = await LogInApi(
-        form.email,
-        form.password
-      );
-     // set it to global state...
-     setUser(response);
-     setIsLoggedIn(true);
-      
-     Alert.alert("Success","user signed in successfully")
-     router.replace("/home")
-      
+     await LogInApi(form.email, form.password);
+
+      // set it to global state...
+      const result = await getCurrentUser();
+
+      setUser(result);
+      setIsLoggedIn(true);
+
+      Alert.alert("Success", "user signed in successfully");
+      router.replace("/home");
     } catch (error: any) {
       Alert.alert("Error", error.message);
     } finally {
       setIsSubmmitting(false);
     }
   };
-
 
   return (
     <SafeAreaView style={styles.container}>

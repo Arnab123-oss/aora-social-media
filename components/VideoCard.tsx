@@ -139,8 +139,8 @@ const VideoCard: React.FC<VideoCardProps> = (video) => {
             alignItems: "center",
             borderRadius: 12,
             marginTop: 12,
-            borderWidth: 1,
-            borderColor: "red",
+            // borderWidth: 1,
+            // borderColor: "red",
           }}
           activeOpacity={0.7}
            onPress={() => {
