@@ -15,8 +15,11 @@ import { icons } from "@/constants";
 import CustomButton from "@/components/CustomButton";
 import * as DocumentPicker from "expo-document-picker";
 import { router } from "expo-router";
+import { createVideo } from "@/lib/apperite";
+import { UseGlobalContext } from "@/context/GlobalProvider";
 
 const Create = () => {
+  const { user } = UseGlobalContext();
   const [form, setForm] = useState({
     title: "",
     prompt: "",
@@ -24,7 +27,7 @@ const Create = () => {
     video: null,
   });
   const [uploading, setUploading] = useState(false);
-  const submit = () => {
+  const submit = async () => {
     if (
       form.prompt === "" ||
       form.title === "" ||
@@ -36,10 +39,10 @@ const Create = () => {
 
     setUploading(true);
     try {
-      // await createVideoPost({
-      //   ...form,
-      //   userId: user.$id,
-      // });
+      await createVideo({
+        ...form,
+        userId: user.$id,
+      });
 
       Alert.alert("Success", "Post uploaded successfully");
       router.push("/home");
@@ -76,11 +79,12 @@ const Create = () => {
           video: result.assets[0],
         });
       }
-    } else {
-      setTimeout(() => {
-        Alert.alert("Document picked", JSON.stringify(result, null, 2));
-      }, 100);
     }
+    // else {
+    //   setTimeout(() => {
+    //     Alert.alert("Document picked", JSON.stringify(result, null, 2));
+    //   }, 100);
+    // }
   };
   return (
     <SafeAreaView style={{ backgroundColor: Colors.primary, height: "100%" }}>
@@ -126,9 +130,7 @@ const Create = () => {
                   borderRadius: 16,
                   marginTop: 10,
                 }}
-                useNativeControls
                 resizeMode={ResizeMode.COVER}
-                isLooping
               />
             ) : (
               <View
